@@ -32,6 +32,7 @@ public class DepartmentDao {
             preparedStmt.execute();
             rs = preparedStmt.getGeneratedKeys();
             if(rs.next()){
+                logger.debug("ID before generatedKey: " + department.getId());
                 logger.debug("Getting generatedKey: " + rs.getLong("id"));
                 long generatedKey = rs.getLong("id");
                 department.setId(generatedKey);

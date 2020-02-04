@@ -18,26 +18,28 @@ public class DepartmentDaoTest {
 
     @Before
     public void setUp(){
-        logger.debug("Executing setUp beforeTest...");
+        logger.info("Executing setUp beforeTest...");
         departmentDao = new DepartmentDao();
         testRecord = new Department();
         testRecord.setName("DC");
         testRecord.setDescription("DataBase Center");
         testRecord.setLocation("Room 104, 999 Washington Ave. Falls Church, VA");
         testRecord = departmentDao.save(testRecord);
-        logger.debug("Automatic generated Id: " + testRecord.getId());
+        assert(0 != testRecord.getId());
+//        logger.debug("Automatic generated Id: " + testRecord.getId());
     }
 
     @After
     public void tearDown(){
         boolean result = true;
-        logger.debug("Executing tearDown afterTest...");
+        logger.info("Executing tearDown afterTest...");
         result = departmentDao.delete(testRecord.getId());
-        if(result == true){
-            logger.debug("Do not delete the record with Id: " + testRecord.getId());
-        } else {
-            logger.debug("Have deleted the record with Id: " + testRecord.getId());
-        }
+        assert(!result);
+//        if(result){
+//            logger.debug("Do not tear down the test setUp record with Id: " + testRecord.getId());
+//        } else {
+//            logger.debug("Have deleted the test setUp record with Id: " + testRecord.getId());
+//        }
     }
 
     @Test
