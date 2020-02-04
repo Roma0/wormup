@@ -1,16 +1,26 @@
 package com.ascending.model;
 
-public class Account {
-    private int id;
-    private String accountType;
-    private float balance;
-    private int employeeId;
+import javax.persistence.*;
 
-    public int getId() {
+@Entity
+@Table(name = "account")
+public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
+    @Column(name = "accountType")
+    private String accountType;
+    @Column(name = "balance")
+    private float balance;
+    @Column(name = "employeeId")
+    private long employeeId;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -29,11 +39,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public int getEmployeeId() {
+    public long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(long employeeId) {
         this.employeeId = employeeId;
     }
 

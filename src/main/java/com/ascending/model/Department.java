@@ -1,16 +1,30 @@
 package com.ascending.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "department")
 public class Department {
-    private int id;
+    public Department(){};
+    public Department(String name, String description, String location){
+        this.name = name;
+        this.description = description;
+        this.location = location;
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "location")
     private String location;
 
-    public int getId(){
-        return id;
-    }
+    public long getId(){ return id; }
 
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
 
