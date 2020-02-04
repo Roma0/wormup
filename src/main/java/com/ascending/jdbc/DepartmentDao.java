@@ -54,11 +54,11 @@ public class DepartmentDao {
     }
 
     public boolean delete(long id){
-        Department department = new Department();
+//        Department department = new Department();
         Connection conn = null;
         Statement stmt = null;
         String sql;
-//        ResultSet rs;
+        boolean rs = true;
 
         try{
             logger.debug("Connecting database...");
@@ -66,7 +66,8 @@ public class DepartmentDao {
             logger.debug("Creating delete statement...");
             stmt = conn.createStatement();
             sql = "delete from department where id = " + id;
-            stmt.execute(sql);
+            rs = stmt.execute(sql);
+            logger.debug("Delete method return result:"+ rs + "");
         }
         catch (Exception e){
             e.printStackTrace();
@@ -81,7 +82,7 @@ public class DepartmentDao {
                 se.printStackTrace();
             }
         }
-        return false;
+        return rs;
     }
 
     public List<Department> getDepartments(){

@@ -18,7 +18,7 @@ public class DepartmentDaoTest {
 
     @Before
     public void setUp(){
-        logger.debug("Executing beforeTest...");
+        logger.debug("Executing setUp beforeTest...");
         departmentDao = new DepartmentDao();
         testRecord = new Department();
         testRecord.setName("DC");
@@ -30,16 +30,21 @@ public class DepartmentDaoTest {
 
     @After
     public void tearDown(){
-        logger.debug("Executing afterTest...");
-        departmentDao.delete(testRecord.getId());
-        logger.debug("Have deleted the record with Id: " + testRecord.getId());
+        boolean result = true;
+        logger.debug("Executing tearDown afterTest...");
+        result = departmentDao.delete(testRecord.getId());
+        if(result == true){
+            logger.debug("Do not delete the record with Id: " + testRecord.getId());
+        } else {
+            logger.debug("Have deleted the record with Id: " + testRecord.getId());
+        }
     }
 
     @Test
     public void getDepartmentsTest(){
         System.out.println("Test method 1");
         List<Department> departments = departmentDao.getDepartments();
-        int expectedNumOfDept = 1;
+        int expectedNumOfDept = 2;
         Assert.assertEquals(expectedNumOfDept, departments.size());
     }
 
