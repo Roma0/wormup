@@ -9,11 +9,11 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
-    @Column(name = "accountType")
+    @Column(name = "account_type")
     private String accountType;
     @Column(name = "balance")
     private float balance;
-    @Column(name = "employeeId")
+    @Column(name = "employee_id")
     private long employeeId;
 
     public long getId() {

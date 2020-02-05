@@ -1,23 +1,35 @@
 package com.ascending.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "employee")
 public class Employee {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "first_Name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+    @Column(name = "email")
     private String email;
+    @Column(name = "address")
     private String address;
-    private int departmentId;
+    @Column(name = "department_id")
+    private long departmentId;
     private List<Account> accounts = new ArrayList();
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -65,7 +77,7 @@ public class Employee {
         return departmentId;
     }
 
-    public void setDepartmentId(int departmentId) {
+    public void setDepartmentId(long departmentId) {
         this.departmentId = departmentId;
     }
 
