@@ -21,9 +21,15 @@ public class Employee {
     private String email;
     @Column(name = "address")
     private String address;
-    @Column(name = "department_id")
-    private long departmentId;
-    private List<Account> accounts = new ArrayList();
+//    @Column(name = "department_id")
+//    private long departmentId;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Account> accounts;
 
     public long getId() {
         return id;
@@ -73,24 +79,28 @@ public class Employee {
         this.address = address;
     }
 
-    public long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(long departmentId) {
-        this.departmentId = departmentId;
-    }
+//    public long getDepartmentId() {
+//        return departmentId;
+//    }
+//
+//    public void setDepartmentId(long departmentId) {
+//        this.departmentId = departmentId;
+//    }
 
     public List<Account> getAccounts() {
         return accounts;
     }
+//
+//    public void setAccounts(List<Account> accounts) {
+//        this.accounts = accounts;
+//    }
 
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
+    public void setDepartment(Department department){this.department = department;}
+
+    public Department getDepartment(){return department;}
 
     @Override
     public String toString() {
-        return String.format("[%d | %s | %s | %s | %s | %s | %d]", id, name, firstName, lastName, email, address, departmentId);
+        return String.format("[%d | %s | %s | %s | %s | %s]", id, name, firstName, lastName, email, address);
     }
 }

@@ -1,6 +1,7 @@
 package com.ascending.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "department")
@@ -21,6 +22,9 @@ public class Department {
     private String description;
     @Column(name = "location")
     private String location;
+
+    @OneToMany(mappedBy = "department")
+    private Set<Employee> employees;
 
     public long getId(){ return id; }
 
@@ -50,4 +54,9 @@ public class Department {
     public void setLocation(String location){
         this.location = location;
     }
+
+    public Set<Employee> getEmployees(){return employees;}
+
+//    public void setEmployees(Set<Employee> employees){this.employees = employees;}
+
 }

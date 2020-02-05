@@ -4,7 +4,6 @@ import com.ascending.model.Department;
 import com.ascending.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -12,9 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class DepartmentImpl implements DepartmentDao {
-//    private SessionFactory sessionFactory;
-    private Logger logger= LoggerFactory.getLogger(getClass());
+public class DepartmentDaoImpl implements DepartmentDao {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Department save(Department department) {
@@ -27,15 +25,27 @@ public class DepartmentImpl implements DepartmentDao {
         }
         catch (Exception e){
             if (transaction != null) transaction.rollback();
-            logger.error(e.getMessage());
+            logger.error("Failure to insert record", e);
         }
-        return null;
+        if (department != null)logger.debug("Tje department was inserted into database");
+            return null;
     }
 
-//    @Override
-//    public Department update(Department department) {
-//        return null;
-//    }
+    @Override
+    public Department update(Department department) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(department);
+            transaction.commit();
+            return department;
+        }
+        catch (Exception e){
+            if (transaction != null) transaction.rollback();
+            logger.error("Failure to update record", e.getMessage());
+            return null;
+        }
+    }
 
     @Override
     public boolean delete(String deptName) {
@@ -57,11 +67,25 @@ public class DepartmentImpl implements DepartmentDao {
     }
 
     @Override
-    public List<Department> getDepartment() {
+    public List<Department> getDepartments() {
         String hql = "FROM Department";
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Department> query = session.createQuery(hql);
             return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         }
+    }
+
+    @Override
+    public List<Department> getDepartmentsAndEmployeesByDepartmentName(String deptName) {
+        if (deptName == null) return null;
+        List<Department> resultList;
+        String hql = "FROM Department as dept left join fetch dept.employees where lower(dept.name) = :deptName1";
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query query = session.createQuery(hql);
+            query.setParameter("deptName1", deptName.toLowerCase());
+            resultList = query.list();
+
+        }
+        return resultList;
     }
 }
