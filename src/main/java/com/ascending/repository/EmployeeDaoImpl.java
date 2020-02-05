@@ -4,7 +4,6 @@ import com.ascending.model.Employee;
 import com.ascending.util.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class EmployeeDaoImpl implements EmployeeDao {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Employee save(Employee employee) {

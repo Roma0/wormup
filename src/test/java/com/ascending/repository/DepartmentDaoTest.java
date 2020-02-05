@@ -37,6 +37,13 @@ public class DepartmentDaoTest {
         employeeDao.save(e2);
     }
 
+    @After
+    public void tearDown(){
+        employeeDao.delete("yd");
+        employeeDao.delete("lu");
+        departmentDao.delete("test");
+    }
+
     @Test
     public void getDepartmentsAndEmployeesByDepartmentNameTest(){
         String expectedDepartment = "test";
@@ -47,11 +54,6 @@ public class DepartmentDaoTest {
         Assert.assertEquals(result.getName(), expectedDepartment);
         Assert.assertEquals(result.getEmployees().size(), 2);
     }
-
-//    @After
-//    public void tearDown(){
-//        employeeDao
-//    }
 
 //    @Test
 //    public void getDepartmentsTest() {
