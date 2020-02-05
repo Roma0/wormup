@@ -63,7 +63,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
             if (transaction != null) transaction.rollback();
             logger.error(e.getMessage());
         }
-        return deletedCount >=1 ? true:false;
+        return deletedCount >= 1 ? true:false;
     }
 
     @Override

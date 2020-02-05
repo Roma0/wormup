@@ -16,6 +16,7 @@ public class DepartmentDaoTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private DepartmentDao departmentDao;
     private EmployeeDao employeeDao;
+
     @Before
     public void init() {
         departmentDao = new DepartmentDaoImpl();
@@ -23,6 +24,7 @@ public class DepartmentDaoTest {
         d1.setName("test");
         departmentDao.save(d1);
 
+        employeeDao = new EmployeeDaoImpl();
         Employee e1 = new Employee();
         e1.setName("yd");
 
@@ -31,13 +33,14 @@ public class DepartmentDaoTest {
 
         e1.setDepartment(d1);
         employeeDao.save(e1);
+        e2.setDepartment(d1);
         employeeDao.save(e2);
     }
 
     @Test
     public void getDepartmentsAndEmployeesByDepartmentNameTest(){
-        String expectedDepartment = "HR";
-        List<Department> departments = departmentDao.getDepartmentsAndEmployeesByDepartmentName("HR");
+        String expectedDepartment = "test";
+        List<Department> departments = departmentDao.getDepartmentsAndEmployeesByDepartmentName("test");
 
         Assert.assertTrue(departments.size() > 0);
         Department result = departments.get(0);
