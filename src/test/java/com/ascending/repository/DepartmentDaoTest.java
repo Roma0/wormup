@@ -48,19 +48,19 @@ public class DepartmentDaoTest {
     public void getDepartmentsAndEmployeesByDepartmentNameTest(){
         String expectedDepartment = "Test";
         Department department = departmentDao.getDepartmentsAndEmployeesByDepartmentName("test");
-        
+
         Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment.toLowerCase());
         Assert.assertEquals(department.getEmployees().size(), 2);
     }
 
-//    @Test
-//    public void getDepartmentsTest() {
-//        List<Department> departments = departmentDao.getDepartments();
-//        int expectedNumOfDept = 4;
-//
-//        departments.forEach(dept -> System.out.println(dept));
-//        Assert.assertEquals(expectedNumOfDept, departments.size());
-//    }
+    @Test
+    public void getDepartmentsTest() {
+        List<Department> departments = departmentDao.getDepartments();
+        int expectedNumOfDept = 5;
+
+        departments.forEach(dept -> System.out.println(dept));
+        Assert.assertEquals(expectedNumOfDept, departments.size());
+    }
 
 //    @Test
 //    public void getDepartmentByName() {
