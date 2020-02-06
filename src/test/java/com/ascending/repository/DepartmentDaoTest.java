@@ -52,7 +52,7 @@ public class DepartmentDaoTest {
         Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment.toLowerCase());
         Assert.assertEquals(department.getEmployees().size(), 2);
     }
-/fdfsd
+    
     @Test
     public void getDepartmentsTest() {
         List<Department> departments = departmentDao.getDepartments();
