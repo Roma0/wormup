@@ -9,5 +9,5 @@ public interface DepartmentDao {
     Department update(Department department);
     List<Department> getDepartments();
     boolean delete(String deptName);
-    List<Department> getDepartmentsAndEmployeesByDepartmentName(String deptName);
+    Department getDepartmentsAndEmployeesByDepartmentName(String deptName);
 }

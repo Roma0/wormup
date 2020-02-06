@@ -76,16 +76,16 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public List<Department> getDepartmentsAndEmployeesByDepartmentName(String deptName) {
+    public Department getDepartmentsAndEmployeesByDepartmentName(String deptName) {
         if (deptName == null) return null;
-        List<Department> resultList;
+        Department result;
         String hql = "FROM Department as dept left join fetch dept.employees where lower(dept.name) = :deptName1";
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
-            Query query = session.createQuery(hql);
+            Query<Department> query = session.createQuery(hql);
             query.setParameter("deptName1", deptName.toLowerCase());
-            resultList = query.list();
+            result = query.uniqueResult();
 
         }
-        return resultList;
+        return result;
     }
 }
