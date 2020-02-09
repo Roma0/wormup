@@ -76,7 +76,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public Department getDepartmentsAndEmployeesByDepartmentName(String deptName) {
+    public Department getDepartmentAndEmployeesByDepartmentName(String deptName) {
         if (deptName == null) return null;
         Department result;
         String hql = "FROM Department as dept left join fetch dept.employees where lower(dept.name) = :deptName1";
@@ -87,5 +87,11 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
         }
         return result;
+    }
+
+    //To do getByName
+    @Override
+    public Department getDepartmentByName(String deptName) {
+        return null;
     }
 }

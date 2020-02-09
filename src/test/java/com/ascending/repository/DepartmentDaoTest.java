@@ -45,9 +45,9 @@ public class DepartmentDaoTest {
     }
 
     @Test
-    public void getDepartmentsAndEmployeesByDepartmentNameTest(){
+    public void getDepartmentAndEmployeesByDepartmentNameTest(){
         String expectedDepartment = "Test";
-        Department department = departmentDao.getDepartmentsAndEmployeesByDepartmentName("test");
+        Department department = departmentDao.getDepartmentAndEmployeesByDepartmentName("test");
 
         Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment.toLowerCase());
         Assert.assertEquals(department.getEmployees().size(), 2);
@@ -61,6 +61,8 @@ public class DepartmentDaoTest {
         departments.forEach(dept -> System.out.println(dept));
         Assert.assertEquals(expectedNumOfDept, departments.size());
     }
+
+    //To do all method unit tests
 
 //    @Test
 //    public void getDepartmentByName() {
