@@ -90,7 +90,8 @@ public class Employee {
     public List<Account> getAccounts() {
         return accounts;
     }
-// Hard to set a <List>
+
+//// Hard to set a <List>
 //    public void setAccounts(List<Account> accounts) {
 //        this.accounts = accounts;
 //    }
