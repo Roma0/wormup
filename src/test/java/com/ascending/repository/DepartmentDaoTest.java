@@ -2,6 +2,7 @@ package com.ascending.repository;
 
 import com.ascending.model.Department;
 import com.ascending.model.Employee;
+import com.sun.javafx.binding.StringFormatter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +19,8 @@ public class DepartmentDaoTest {
     private EmployeeDao employeeDao;
 
     @Before
-    public void init() {
+    public void setUp() {
+        logger.debug("SetUp before testing ...");
         departmentDao = new DepartmentDaoImpl();
         Department d1 = new Department();
         d1.setName("test");
@@ -39,6 +41,7 @@ public class DepartmentDaoTest {
 
     @After
     public void tearDown(){
+        logger.debug("TearDown after testing ...");
         employeeDao.delete("yd");
         employeeDao.delete("lu");
         departmentDao.delete("test");
@@ -46,23 +49,50 @@ public class DepartmentDaoTest {
 
     @Test
     public void getDepartmentAndEmployeesByDepartmentNameTest(){
-        String expectedDepartment = "Test";
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+        String expectedDepartment = "test";
         Department department = departmentDao.getDepartmentAndEmployeesByDepartmentName("test");
 
-        Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment.toLowerCase());
+        Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment);
         Assert.assertEquals(department.getEmployees().size(), 2);
     }
     
     @Test
     public void getDepartmentsTest() {
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
         List<Department> departments = departmentDao.getDepartments();
         int expectedNumOfDept = 5;
 
-        departments.forEach(dept -> System.out.println(dept));
+//        departments.forEach(dept -> System.out.println(dept));
         Assert.assertEquals(expectedNumOfDept, departments.size());
     }
 
-    //To do all method unit tests
+//    Question1: Wrong way to test a method with another parallel method?
+//    Question2: Need to getObject from the database again for assertion?
+    @Test
+    public void updateTest(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+
+        departmentDao = new DepartmentDaoImpl();
+
+        Department expectedDepartment = departmentDao.getDepartmentByName("test");
+        expectedDepartment.setLocation("location Changed");
+
+        Department department = departmentDao.update(expectedDepartment);
+
+        Assert.assertEquals(expectedDepartment, department);
+    }
+
+    @Test
+    public void getDepartmentByNameTest(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+        String deptName = "test";
+
+        departmentDao = new DepartmentDaoImpl();
+        Department department = departmentDao.getDepartmentByName(deptName);
+
+        Assert.assertEquals(deptName, department.getName());
+    }
 
 //    @Test
 //    public void getDepartmentByName() {
