@@ -30,11 +30,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
     }
 
+
     @Override
-    public Employee update(Employee employee) {
+    public Employee updateEmployeeAddress(Employee employee, String address) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
+            employee.setAddress(address);
             session.saveOrUpdate(employee);
             transaction.commit();
             return employee;

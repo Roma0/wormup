@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmployeeDao {
     Employee save(Employee employee);
-    Employee updateEmployeeAddress(Employee employee);
+    Employee updateEmployeeAddress(Employee employee, String address);
     List<Employee> getEmployee();
     boolean delete(String employeeName);
 }
