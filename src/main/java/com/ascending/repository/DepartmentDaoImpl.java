@@ -89,9 +89,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return result;
     }
 
-    //To do getByName
     @Override
     public Department getDepartmentByName(String deptName) {
-        return null;
+        String hql = "From Department as dept WHERE dept.name = :deptName";
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Department> query = session.createQuery(hql);
+            query.setParameter("deptName", deptName);
+
+            return query.uniqueResult();
+        }
     }
 }
