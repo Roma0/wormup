@@ -49,11 +49,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Employee> getEmployee() {
+    public List<Employee> getEmployees() {
         String hql = "FROM Employee";
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             Query<Employee> query = session.createQuery(hql);
             return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+        }
+        catch (Exception e){
+            logger.debug(e.getMessage());
+            return null;
         }
     }
 
@@ -67,6 +71,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             Query<Employee> query = session.createQuery(hql);
             query.setParameter("emplName1", eplyName);
             deletedCount = query.executeUpdate();
+            transaction.commit();
         }
         catch (Exception e){
             if (transaction != null)transaction.rollback();
