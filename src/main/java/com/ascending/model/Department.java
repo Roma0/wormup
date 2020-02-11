@@ -57,6 +57,6 @@ public class Department {
 
     public Set<Employee> getEmployees(){return employees;}
 
-//    public void setEmployees(Set<Employee> employees){this.employees = employees;}
+    public void setEmployees(Set<Employee> employees){this.employees = employees;}
 
 }

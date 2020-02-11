@@ -3,6 +3,7 @@ package com.ascending.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "employee")
@@ -29,7 +30,7 @@ public class Employee {
     private Department department;
 
     @OneToMany(mappedBy = "employee")
-    private List<Account> accounts;
+    private Set<Account> accounts;
 
     public long getId() {
         return id;
@@ -87,18 +88,23 @@ public class Employee {
 //        this.departmentId = departmentId;
 //    }
 
-    public List<Account> getAccounts() {
+    public Set<Account> getAccounts() {
+        try {
+            int size = accounts.size();
+        }
+        catch (Exception e){
+            return null;
+        }
         return accounts;
     }
 
-//// Hard to set a <List>
-//    public void setAccounts(List<Account> accounts) {
-//        this.accounts = accounts;
-//    }
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     public void setDepartment(Department department){this.department = department;}
 
-    public Department getDepartment(){return department;}
+    public Department getDepartment(){ return department; }
 
     @Override
     public String toString() {
