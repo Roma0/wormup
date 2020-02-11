@@ -1,21 +1,30 @@
 package com.ascending.repository;
 
+import com.ascending.ApplicationBootstrap;
 import com.ascending.model.Department;
 import com.ascending.model.Employee;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = ApplicationBootstrap.class)
 public class DepartmentDaoTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private DepartmentDao departmentDao = new DepartmentDaoImpl();
-    private EmployeeDao employeeDao = new EmployeeDaoImpl();
+    @Autowired DepartmentDao departmentDao;
+    @Autowired EmployeeDao employeeDao;
+
+//    private DepartmentDao departmentDao = new DepartmentDaoImpl();
+//    private EmployeeDao employeeDao = new EmployeeDaoImpl();
 
     @Before
     public void setUp() {
