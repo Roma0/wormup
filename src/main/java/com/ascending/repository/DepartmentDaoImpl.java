@@ -58,6 +58,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
             Query<Department> query = session.createQuery(hql);
             query.setParameter("deptname1", deptName);
             deletedCount = query.executeUpdate();
+            transaction.commit();
         }
         catch (Exception e){
             if (transaction != null) transaction.rollback();
@@ -73,10 +74,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
             Query<Department> query = session.createQuery(hql);
             return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         }
+        catch (Exception e){
+            logger.debug(e.getMessage());
+            return null;
+        }
     }
 
     @Override
-    public Department getDepartmentsAndEmployeesByDepartmentName(String deptName) {
+    public Department getDepartmentAndEmployeesByDepartmentName(String deptName) {
         if (deptName == null) return null;
         Department result;
         String hql = "FROM Department as dept left join fetch dept.employees where lower(dept.name) = :deptName1";
@@ -84,8 +89,25 @@ public class DepartmentDaoImpl implements DepartmentDao {
             Query<Department> query = session.createQuery(hql);
             query.setParameter("deptName1", deptName.toLowerCase());
             result = query.uniqueResult();
-
+            return result;
         }
-        return result;
+        catch (Exception e){
+            logger.debug(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public Department getDepartmentByName(String deptName) {
+        String hql = "From Department as dept WHERE dept.name = :deptName";
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Department> query = session.createQuery(hql);
+            query.setParameter("deptName", deptName);
+            return query.uniqueResult();
+        }
+        catch (Exception e){
+            logger.debug(e.getMessage());
+        }
+        return null;
     }
 }

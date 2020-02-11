@@ -18,7 +18,7 @@ public class DepartmentDaoTest {
 
     @Before
     public void setUp(){
-        logger.info("Executing setUp beforeTest...");
+        logger.info("Executing setUp beforeTest");
         departmentDao = new DepartmentDao();
         testRecord = new Department();
         testRecord.setName("DC");

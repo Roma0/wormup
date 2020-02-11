@@ -30,33 +30,44 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
     }
 
+
     @Override
-    public Employee update(Employee employee) {
+    public int updateEmployeeAddressByName(String name, String address) {
         Transaction transaction = null;
+        int updateCount = 0;
+        String hql = "UPDATE Employee as em SET em.address = :address WHERE em.name = :name";
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Employee> query = session.createQuery(hql);
+            query.setParameter("name", name);
+            query.setParameter("address", address);
+
             transaction = session.beginTransaction();
-            session.saveOrUpdate(employee);
+            updateCount = query.executeUpdate();
             transaction.commit();
-            return employee;
         }
         catch (Exception e){
             if (transaction != null)transaction.rollback();
             logger.error(e.getMessage());
-            return null;
         }
+        return updateCount;
     }
 
     @Override
-    public List<Employee> getEmployee() {
+    public List<Employee> getEmployees() {
         String hql = "FROM Employee";
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             Query<Employee> query = session.createQuery(hql);
             return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
         }
+        catch (Exception e){
+            logger.debug(e.getMessage());
+            return null;
+        }
     }
 
     @Override
-    public boolean delete(String eplyName) {
+    public boolean deleteByName(String eplyName) {
         String hql = "DELETE Employee as e where e.name = :emplName1";
         int deletedCount = 0;
         Transaction transaction = null;
@@ -65,6 +76,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             Query<Employee> query = session.createQuery(hql);
             query.setParameter("emplName1", eplyName);
             deletedCount = query.executeUpdate();
+            transaction.commit();
         }
         catch (Exception e){
             if (transaction != null)transaction.rollback();

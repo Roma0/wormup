@@ -14,52 +14,80 @@ import java.util.List;
 
 public class DepartmentDaoTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private DepartmentDao departmentDao;
-    private EmployeeDao employeeDao;
+    private DepartmentDao departmentDao = new DepartmentDaoImpl();
+    private EmployeeDao employeeDao = new EmployeeDaoImpl();
 
     @Before
-    public void init() {
-        departmentDao = new DepartmentDaoImpl();
+    public void setUp() {
+        logger.debug("SetUp before testing ...");
         Department d1 = new Department();
         d1.setName("test");
-        departmentDao.save(d1);
+        assert (0 != departmentDao.save(d1).getId());
 
-        employeeDao = new EmployeeDaoImpl();
         Employee e1 = new Employee();
         e1.setName("yd");
+        e1.setDepartment(d1);
+        assert (0 != employeeDao.save(e1).getId());
 
         Employee e2 = new Employee();
         e2.setName("lu");
-
-        e1.setDepartment(d1);
-        employeeDao.save(e1);
         e2.setDepartment(d1);
-        employeeDao.save(e2);
+        assert (0 != employeeDao.save(e2).getId());
     }
 
     @After
     public void tearDown(){
-        employeeDao.delete("yd");
-        employeeDao.delete("lu");
-        departmentDao.delete("test");
+        logger.debug("TearDown after testing ...");
+        assert (employeeDao.deleteByName("yd"));
+        assert (employeeDao.deleteByName("lu"));
+        assert (departmentDao.delete("test"));
     }
 
     @Test
-    public void getDepartmentsAndEmployeesByDepartmentNameTest(){
-        String expectedDepartment = "Test";
-        Department department = departmentDao.getDepartmentsAndEmployeesByDepartmentName("test");
+    public void getDepartmentAndEmployeesByDepartmentNameTest(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+        String expectedDepartment = "test";
+        Department department = departmentDao.getDepartmentAndEmployeesByDepartmentName("test");
 
-        Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment.toLowerCase());
+        Assert.assertEquals(department.getName().toLowerCase(), expectedDepartment);
         Assert.assertEquals(department.getEmployees().size(), 2);
     }
-
+    
     @Test
     public void getDepartmentsTest() {
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
         List<Department> departments = departmentDao.getDepartments();
         int expectedNumOfDept = 5;
 
-        departments.forEach(dept -> System.out.println(dept));
+//        departments.forEach(dept -> System.out.println(dept));
         Assert.assertEquals(expectedNumOfDept, departments.size());
+    }
+
+//    Question1: Wrong way to test a method with another parallel method?
+//    Question2: Need to getObject from the database again for assertion?
+    @Test
+    public void updateTest(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+
+        departmentDao = new DepartmentDaoImpl();
+
+        Department expectedDepartment = departmentDao.getDepartmentByName("test");
+        expectedDepartment.setLocation("location Changed");
+
+        Department department = departmentDao.update(expectedDepartment);
+
+        Assert.assertEquals(expectedDepartment, department);
+    }
+
+    @Test
+    public void getDepartmentByNameTest(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+        String deptName = "test";
+
+        departmentDao = new DepartmentDaoImpl();
+        Department department = departmentDao.getDepartmentByName(deptName);
+
+        Assert.assertEquals(deptName, department.getName());
     }
 
 //    @Test
