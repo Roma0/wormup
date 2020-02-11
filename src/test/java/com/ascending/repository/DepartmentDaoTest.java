@@ -24,7 +24,6 @@ public class DepartmentDaoTest {
         departmentDao = new DepartmentDaoImpl();
         Department d1 = new Department();
         d1.setName("test");
-        departmentDao.save(d1);
 
         employeeDao = new EmployeeDaoImpl();
         Employee e1 = new Employee();
@@ -42,8 +41,8 @@ public class DepartmentDaoTest {
     @After
     public void tearDown(){
         logger.debug("TearDown after testing ...");
-        employeeDao.delete("yd");
-        employeeDao.delete("lu");
+        employeeDao.deleteByName("yd");
+        employeeDao.deleteByName("lu");
         departmentDao.delete("test");
     }
 

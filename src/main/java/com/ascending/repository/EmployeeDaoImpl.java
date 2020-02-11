@@ -32,20 +32,25 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
     @Override
-    public Employee updateEmployeeAddress(Employee employee, String address) {
+    public int updateEmployeeAddressByName(String name, String address) {
         Transaction transaction = null;
+        int updateCount = 0;
+        String hql = "UPDATE Employee as em SET em.address = :address WHERE em.name = :name";
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Employee> query = session.createQuery(hql);
+            query.setParameter("name", name);
+            query.setParameter("address", address);
+
             transaction = session.beginTransaction();
-            employee.setAddress(address);
-            session.saveOrUpdate(employee);
+            updateCount = query.executeUpdate();
             transaction.commit();
-            return employee;
         }
         catch (Exception e){
             if (transaction != null)transaction.rollback();
             logger.error(e.getMessage());
-            return null;
         }
+        return updateCount;
     }
 
     @Override
@@ -62,7 +67,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public boolean delete(String eplyName) {
+    public boolean deleteByName(String eplyName) {
         String hql = "DELETE Employee as e where e.name = :emplName1";
         int deletedCount = 0;
         Transaction transaction = null;
