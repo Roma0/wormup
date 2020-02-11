@@ -2,7 +2,6 @@ package com.ascending.repository;
 
 import com.ascending.model.Department;
 import com.ascending.model.Employee;
-import com.sun.javafx.binding.StringFormatter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,35 +14,33 @@ import java.util.List;
 
 public class DepartmentDaoTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private DepartmentDao departmentDao;
-    private EmployeeDao employeeDao;
+    private DepartmentDao departmentDao = new DepartmentDaoImpl();
+    private EmployeeDao employeeDao = new EmployeeDaoImpl();
 
     @Before
     public void setUp() {
         logger.debug("SetUp before testing ...");
-        departmentDao = new DepartmentDaoImpl();
         Department d1 = new Department();
         d1.setName("test");
+        assert (0 != departmentDao.save(d1).getId());
 
-        employeeDao = new EmployeeDaoImpl();
         Employee e1 = new Employee();
         e1.setName("yd");
+        e1.setDepartment(d1);
+        assert (0 != employeeDao.save(e1).getId());
 
         Employee e2 = new Employee();
         e2.setName("lu");
-
-        e1.setDepartment(d1);
-        employeeDao.save(e1);
         e2.setDepartment(d1);
-        employeeDao.save(e2);
+        assert (0 != employeeDao.save(e2).getId());
     }
 
     @After
     public void tearDown(){
         logger.debug("TearDown after testing ...");
-        employeeDao.deleteByName("yd");
-        employeeDao.deleteByName("lu");
-        departmentDao.delete("test");
+        assert (employeeDao.deleteByName("yd"));
+        assert (employeeDao.deleteByName("lu"));
+        assert (departmentDao.delete("test"));
     }
 
     @Test
