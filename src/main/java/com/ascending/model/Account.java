@@ -5,9 +5,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "account")
 public class Account {
+    public Account(){}
+    public Account(String accountType, double balance){
+        this.accountType = accountType;
+        this.balance = balance;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+//    @Column(name = "id")
     private long id;
     @Column(name = "account_type")
     private String accountType;
@@ -17,7 +23,7 @@ public class Account {
 //    @Column(name = "employee_id")
 //    private long employeeId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
@@ -32,6 +38,7 @@ public class Account {
     public String getAccountType() {
         return accountType;
     }
+    
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
