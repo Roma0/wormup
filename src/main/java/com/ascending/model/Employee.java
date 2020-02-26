@@ -8,10 +8,21 @@ import java.util.Set;
 @Entity
 @Table(name = "employee")
 public class Employee {
+    public Employee(){}
+    public Employee(String name, String firstName, String lastName, String email, String address){
+        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+//    @Column(name = "id")
     private long id;
+
     @Column(name = "name")
     private String name;
     @Column(name = "first_Name")
@@ -29,7 +40,7 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Account> accounts;
 
     public long getId() {

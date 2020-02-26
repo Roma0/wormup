@@ -23,7 +23,7 @@ public class Department {
     @Column(name = "location")
     private String location;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Employee> employees;
 
     public long getId(){ return id; }
@@ -55,7 +55,16 @@ public class Department {
         this.location = location;
     }
 
-    public Set<Employee> getEmployees(){return employees;}
+    public Set<Employee> getEmployees(){
+        try {
+            int size = employees.size();
+        }
+        catch (Exception e){
+            return null;
+        }
+
+        return employees;
+    }
 
     public void setEmployees(Set<Employee> employees){this.employees = employees;}
 
