@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService {
@@ -30,5 +33,11 @@ public class DepartmentService {
     public List<Department> getDepartmentsWithChildren(){ return  departmentDao.getDepartmentsWithChildren(); }
 
     public Department getDepartmentByName(String deptName){ return departmentDao.getDepartmentByName(deptName); }
+
+    public Department getDepartmentById(long id){
+        List<Department> departments = departmentDao.getDepartmentsWithChildren().stream().filter(e -> e.getId()==id).collect(Collectors.toList());
+
+        return departments.get(0);
+    }
 
 }

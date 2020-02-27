@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -103,5 +104,14 @@ public class DepartmentServiceTest {
 
         Assert.assertEquals(deptName, department.getName());
         Assert.assertEquals(2, department.getEmployees().size());
+    }
+
+    @Test
+    public void getDepartmentById(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+
+        Department department = departmentService.getDepartmentById(1L);
+
+        Assert.assertEquals(1L, department.getId());
     }
 }
