@@ -145,4 +145,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         return null;
     }
+
+    @Override
+    public Employee getEmployeeById(long id) {
+        String hql = "FROM Employee as em WHERE em.id = :id";
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Employee> query = session.createQuery(hql);
+            query.setParameter("id", id);
+
+            return query.uniqueResult();
+        }
+        catch (Exception e){
+            logger.error(e.getMessage());
+        }
+
+        return null;
+    }
 }

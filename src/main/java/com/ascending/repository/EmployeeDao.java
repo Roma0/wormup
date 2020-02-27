@@ -12,4 +12,5 @@ public interface EmployeeDao {
     List<Employee> getEmployeesWithAccounts();
     Employee getEmployeeByName(String name);
     Employee getEmployeeWithAccountsByName(String name);
+    Employee getEmployeeById(long id);
 }

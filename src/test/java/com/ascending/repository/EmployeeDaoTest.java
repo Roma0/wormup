@@ -23,6 +23,8 @@ public class EmployeeDaoTest {
     private String email = "Email@test.com";
     private String accountType = "testAccountType";
     private long accountId = 0;
+    private long testEmployeeId = 1L;
+
 
     @Before
     public void setUp(){
@@ -105,5 +107,12 @@ public class EmployeeDaoTest {
 
         Assert.assertEquals(email, employee.getEmail());
         Assert.assertEquals(1, employee.getAccounts().size());
+    }
+
+    @Test
+    public void getEmployeeById(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+
+        Assert.assertEquals(testEmployeeId, employeeDao.getEmployeeById(testEmployeeId).getId());
     }
 }
