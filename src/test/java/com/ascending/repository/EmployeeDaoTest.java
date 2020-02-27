@@ -19,9 +19,10 @@ public class EmployeeDaoTest {
     private AccountDao accountDao = new AccountDaoImpl();
     private String deptName = "CS";
     private String emName1 = "yd";
-    private String emName2 = "fx";
+//    private String emName2 = "fx";
     private String email = "Email@test.com";
-//    private String accountType = "testAccountType";
+    private String accountType = "testAccountType";
+    private long accountId = 0;
 
     @Before
     public void setUp(){
@@ -33,10 +34,15 @@ public class EmployeeDaoTest {
         e1 = employeeDao.save(e1, deptName);
         assert (0 != e1.getId());
 
-        Employee e2 = new Employee();
-        e2.setName(emName2);
-        e2 = employeeDao.save(e2, deptName);
-        assert (0 != e2.getId());
+        Account account = new Account();
+        account.setAccountType(accountType);
+        if(accountId == 0)accountId = accountDao.save(account, e1.getName()).getId();
+        assert (0 != accountId);
+
+//        Employee e2 = new Employee();
+//        e2.setName(emName2);
+//        e2 = employeeDao.save(e2, deptName);
+//        assert (0 != e2.getId());
 
     }
 
@@ -44,19 +50,34 @@ public class EmployeeDaoTest {
     public void tearDown(){
         logger.debug("TearDown after testing ...");
 
+        if (accountId != 0)assert (accountDao.deleteById(accountId));
+        accountId = 0;
+
         assert (employeeDao.deleteByName(emName1));
-        assert (employeeDao.deleteByName(emName2));
+//        assert (employeeDao.deleteByName(emName2));
     }
 
     @Test
     public void getEmployees(){
         logger.debug(String.format("Testing %s ...", this.getClass().getName()));
 
-        int expectedNum = 6;
+        int expectedNum = 5;
         List<Employee> employeeList = employeeDao.getEmployees();
 
         Assert.assertEquals(expectedNum, employeeList.size());
     }
+
+    @Test
+    public void getEmployeesWithAccounts(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+
+        int expectedNum = 5;
+        List<Employee> employeeList = employeeDao.getEmployeesWithAccounts();
+
+        Assert.assertEquals(expectedNum, employeeList.size());
+        Assert.assertEquals(expectedNum, employeeList.stream().map(e -> e.getAccounts()).distinct().count());
+    }
+
 
     @Test
     public void updateEmployeeAddressByName(){
@@ -74,5 +95,15 @@ public class EmployeeDaoTest {
         logger.debug(String.format("Testing %s ...", this.getClass().getName()));
 
         Assert.assertEquals(email, employeeDao.getEmployeeByName(emName1).getEmail());
+    }
+
+    @Test
+    public void getEmployeeWithAccountsByName(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+
+        Employee employee = employeeDao.getEmployeeWithAccountsByName(emName1);
+
+        Assert.assertEquals(email, employee.getEmail());
+        Assert.assertEquals(1, employee.getAccounts().size());
     }
 }

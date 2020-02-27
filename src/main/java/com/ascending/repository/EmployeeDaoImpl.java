@@ -88,6 +88,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public List<Employee> getEmployees() {
+        String hql = "FROM Employee";
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Employee> query = session.createQuery(hql);
+            return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+        }
+        catch (Exception e){
+            logger.debug(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<Employee> getEmployeesWithAccounts() {
         String hql = "FROM Employee as em left join fetch em.accounts";
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             Query<Employee> query = session.createQuery(hql);
@@ -101,7 +114,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public Employee getEmployeeByName(String name) {
-        String hql = "FROM Employee as em left join fetch em.accounts WHERE lower(em.name) = :emName";
+        String hql = "FROM Employee as em WHERE lower(em.name) = :emName";
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             Query<Employee> query = session.createQuery(hql);
@@ -116,5 +129,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return null;
     }
 
+    @Override
+    public Employee getEmployeeWithAccountsByName(String name) {
+        String hql = "FROM Employee as em left join fetch em.accounts WHERE lower(em.name) = :emName";
 
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Employee> query = session.createQuery(hql);
+            query.setParameter("emName", name);
+
+            return query.uniqueResult();
+        }
+        catch (Exception e){
+            logger.error(e.getMessage());
+        }
+
+        return null;
+    }
 }

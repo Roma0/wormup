@@ -9,5 +9,7 @@ public interface EmployeeDao {
     int updateEmployeeAddressByName(String name, String address);
     boolean deleteByName(String employeeName);
     List<Employee> getEmployees();
+    List<Employee> getEmployeesWithAccounts();
     Employee getEmployeeByName(String name);
+    Employee getEmployeeWithAccountsByName(String name);
 }
