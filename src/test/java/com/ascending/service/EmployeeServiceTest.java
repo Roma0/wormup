@@ -30,7 +30,9 @@ public class EmployeeServiceTest {
     private String emName1 = "yd";
     private String emName2 = "fx";
     private String email = "Email@test.com";
+    private long testEmployeeId = 1L;
 //    private String accountType = "testAccountType";
+
 
     @Before
     public void setUp(){
@@ -81,7 +83,13 @@ public class EmployeeServiceTest {
     @Test
     public void getEmployeeByName(){
         logger.debug(String.format("Testing %s ...", this.getClass().getName()));
-
         Assert.assertEquals(email, employeeService.getEmployeeByName(emName1).getEmail());
     }
+
+    @Test
+    public void getEmployeeById(){
+        logger.debug(String.format("Testing %s ...", this.getClass().getName()));
+        Assert.assertEquals(testEmployeeId, employeeService.getEmployeeById(testEmployeeId).getId());
+    }
+
 }
