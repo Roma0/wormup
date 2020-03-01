@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,14 +20,21 @@ public class EmployeeController {
     @Autowired EmployeeService employeeService;
 
     /**
-     * POST /employees
+     * POST /employees?deptName=value
      * @param employee
      * @param deptName
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public Employee createEmployee(@RequestBody Employee employee, @RequestBody String deptName){
-        Employee em = employeeService.save(employee, deptName);
+    public Employee createEmployee(@RequestBody Employee employee, @RequestParam(name = "deptName") String deptName){
+        Employee em = null;
+        try {
+            em = employeeService.save(employee, deptName);
+        }
+        catch (Exception e){
+            logger.debug(String.format("The department record name of %s failed to inserted."), deptName);
+            logger.debug(e.getMessage());
+        }
         return em;
     }
 
@@ -52,28 +60,59 @@ public class EmployeeController {
     }
 
     /**
-     * GET /employees/?name=value
+     * GET /employees/employeeName?name=value
      * @param name
      * @return
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Employee getEmployeeByName(@RequestParam String name){
+    @RequestMapping(value = "/emloyeeName", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Employee getEmployeeByName(@RequestParam(name = "name") String name){
         Employee em = employeeService.getEmployeeByName(name);
         return em;
     }
 
     /**
-     * PUT /employees
+     * PUT /employees?name=value
+     *
+     * Don't use "@RequestBody" to define "String variable like this method.
      * @param name
+     * @param address
      * @param address
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public Employee updateEmployeeAddressByName(@RequestBody String name, @RequestBody String address){
+    public Employee updateEmployeeAddressByName(@RequestParam(name = "name") String name,
+                                                @RequestBody String address){
         int updateNum = 0;
-        Employee em = new Employee();
+        Employee em;
+
         updateNum = employeeService.updateEmployeeAddressByName(name, address);
-        if(updateNum != 0)em = employeeService.getEmployeeByName(name);
+
+        if(updateNum >=1) {
+            em = employeeService.getEmployeeByName(name);
+        }
+        else {em = null;}
+
         return em;
     }
+
+//    /**
+//     * Not a valid method to pass two @RequestBody
+//     * PUT /employees
+//     * @param name
+//     * @param address
+//     * @return
+//     */
+//    @RequestMapping(method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_VALUE})
+//    public Employee updateEmployeeAddressByName(@RequestBody String name, @RequestBody String address){
+//        int updateNum = 0;
+//        Employee em;
+//
+//        updateNum = employeeService.updateEmployeeAddressByName(name, address);
+//        if(updateNum >=1) {
+//            em = employeeService.getEmployeeByName(name);
+//        }
+//        else {em = null;}
+//
+//        return em;
+//    }
 }
