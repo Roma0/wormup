@@ -46,7 +46,7 @@ public class AccountDaoImpl implements AccountDao{
 
     @Override
     public List<Account> getAccounts() {
-        String hql = "From Account";
+        String hql = "From Account as ac left join fetch ac.employee";
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Account> query = session.createQuery(hql);
             return query.list();
