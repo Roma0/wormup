@@ -18,3 +18,5 @@ CREATE TABLE employee (
     department_id   bigint
 );
 ALTER TABLE employee ADD CONSTRAINT employee_pk PRIMARY KEY ( id );
+ALTER TABLE employee add constraint employee_department_fk foreign key (department_id)
+references department (id);

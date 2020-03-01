@@ -9,5 +9,3 @@ create table account (
 ALTER TABLE account add constraint account_employee_fk foreign key (employee_id)
 references employee (id);
 
-ALTER TABLE employee add constraint employee_department_fk foreign key (department_id)
-references department (id);
