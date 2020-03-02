@@ -4,9 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class Users {
-    public Users(){}
-    public Users(String name, String firstName, String lastName, String email){
+public class User {
+    public User(){}
+    public User(String name, String firstName, String lastName, String email){
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
