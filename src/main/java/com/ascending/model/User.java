@@ -6,8 +6,9 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
     public User(){}
-    public User(String name, String firstName, String lastName, String email){
+    public User(String name, String password, String firstName, String lastName, String email){
         this.name = name;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -19,6 +20,9 @@ public class User {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "first_name")
     private String firstName;
@@ -36,6 +40,10 @@ public class User {
     public String getName(){return this.name;}
 
     public void setName(String name){this.name = name;}
+
+    public String getPassword(){return this.password;}
+
+    public void setPassword(String password){this.password = password;}
 
     public String getFirstName(){return this.firstName;}
 
