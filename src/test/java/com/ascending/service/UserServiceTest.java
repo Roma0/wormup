@@ -51,7 +51,7 @@ public class UserServiceTest {
     public void getUserByEmail(){
         Assert.assertEquals(id, userService.getUserByEmail(email).getId());
     }
-    
+
     @Test
     public void getUserByCredentials(){
         Assert.assertEquals(id, userService.getUserByCredentials(email, password).getId());
