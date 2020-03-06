@@ -1,18 +1,21 @@
 package com.ascending.service;
 
 import com.ascending.model.Employee;
+import com.ascending.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 
+@Service
 public class JwtService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -20,7 +23,7 @@ public class JwtService {
     private static final String ISSUER = "com.ascending";
     private final long EXPIRATION_TIME = 86400 * 1000;
 
-    public String generateToken(Employee user){
+    public String generateToken(User user){
 
         //JWT signature algorithm using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
