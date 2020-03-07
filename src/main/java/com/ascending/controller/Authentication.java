@@ -25,7 +25,28 @@ public class Authentication {
     private String tokenKeyWord = "Authorization";
     private String tokenType = "Bearer";
 
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/signUp", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity singUp(@RequestBody User user) {
+        String token = "";
+
+        try {
+            logger.debug(user.toString());
+            User u = userService.save(user);
+            if (u.getId() == null) return ResponseEntity.status(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION).body(errorMsg);
+            logger.debug(u.toString());
+            token = jwtService.generateToken(u);
+        }
+        catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg == null) msg = "BAD REQUEST!";
+            logger.error(msg);
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(msg);
+        }
+
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(tokenKeyWord + ":" + tokenType + " " + token);
+    }
+
+    @RequestMapping(value = "/signIn", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity authenticate(@RequestBody User user) {
         String token = "";
 
