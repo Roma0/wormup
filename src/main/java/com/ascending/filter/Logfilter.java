@@ -42,6 +42,7 @@ public class Logfilter implements Filter {
             parameters.add(paramName + "=" + paramValues);
         }
         if (!parameters.isEmpty()) {
+            logger.info(String.format("Parameters no exludedWords: %s", parameters.toString()));
             formData = parameters.toString().replaceAll("^.|.$", "");
         }
         return  new StringBuilder("| ")
