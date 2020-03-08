@@ -1,6 +1,11 @@
 package com.ascending.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -33,6 +38,14 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_role",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "role_id") }
+    )
+    @JsonIgnore
+    private List<Role> roles;
+
     public Long getId(){return this.id;}
 
     public void setId(Long id) {this.id = id;}
@@ -43,7 +56,7 @@ public class User {
 
     public String getPassword(){return this.password;}
 
-    public void setPassword(String password){this.password = password;}
+    public void setPassword(String password){this.password = DigestUtils.md5Hex(password.trim());}
 
     public String getFirstName(){return this.firstName;}
 
@@ -56,4 +69,8 @@ public class User {
     public String getEmail(){return this.email;}
 
     public void setEmail(String email){this.email = email;}
+
+    public void setRole(List<Role> roles){this.roles = roles;}
+
+    public List<Role> getRole(){return this.roles;}
 }

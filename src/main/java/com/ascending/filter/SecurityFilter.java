@@ -19,7 +19,9 @@ import java.io.IOException;
 @WebFilter(filterName = "SecurityFilter")
 public class SecurityFilter implements Filter {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private String AUTH_URI = "/auth";
+    private String AUTH_URI = "/auth/signIn";
+//    private static String[] IGNOREURL = {"/auth/*", "/uer"};
+
     @Autowired private JwtService jwtService;
     @Autowired private UserDao userDao;
 
@@ -34,13 +36,28 @@ public class SecurityFilter implements Filter {
             if(token == null || token.isEmpty())return statusCode;
 
             Claims claims = jwtService.decryptJwtToken(token);
-            if(claims.getId() != null){
-                User u = userDao.findById(Long.valueOf(claims.getId()));
-                if(u != null)statusCode = HttpServletResponse.SC_ACCEPTED;
+//            if(claims.getId() != null){
+//                User u = userDao.findById(Long.valueOf(claims.getId()));
+//                if(u != null)statusCode = HttpServletResponse.SC_ACCEPTED;
+//            }
+
+            String allowedResources = "/";
+            switch(verb) {
+                case "GET"    : allowedResources = (String)claims.get("allowedReadResources");   break;
+                case "POST"   : allowedResources = (String)claims.get("allowedCreateResources"); break;
+                case "PUT"    : allowedResources = (String)claims.get("allowedUpdateResources"); break;
+                case "DELETE" : allowedResources = (String)claims.get("allowedDeleteResources"); break;
             }
+            for (String s : allowedResources.split(",")) {
+                if (uri.trim().toLowerCase().startsWith(s.trim().toLowerCase())) {
+                    statusCode = HttpServletResponse.SC_ACCEPTED;
+                    break;
+                }
+            }
+            logger.debug(String.format("Verb: %s, allowed resources: %s", verb, allowedResources));
         }
-        catch (Exception e){
-            logger.error(e.getMessage());
+        catch (Exception e) {
+            logger.error("can't verify the token",e);
         }
 
         return statusCode;

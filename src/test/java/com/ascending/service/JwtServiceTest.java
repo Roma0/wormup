@@ -30,7 +30,7 @@ public class JwtServiceTest {
     private final String lastName = "Fei";
     private final String email = "xf@gmail.com";
     private final String password = "xf123!";
-//    private String token;
+    private String token;
 
     @Before
     public void setUp(){

@@ -35,6 +35,7 @@ public class Authentication {
             if (u.getId() == null) return ResponseEntity.status(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION).body(errorMsg);
             logger.debug(u.toString());
             token = jwtService.generateToken(u);
+            token = token.replaceAll("^(.*)$","{\n\"token\"\\:\"$1\"\n}");
         }
         catch (Exception e) {
             String msg = e.getMessage();
@@ -43,7 +44,8 @@ public class Authentication {
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(msg);
         }
 
-        return ResponseEntity.status(HttpServletResponse.SC_OK).body(tokenKeyWord + ":" + tokenType + " " + token);
+//        return ResponseEntity.status(HttpServletResponse.SC_OK).body(tokenKeyWord + ":" + tokenType + " " + token);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(token.toString());
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.POST, produces = "application/json")
@@ -56,6 +58,8 @@ public class Authentication {
             if (u == null) return ResponseEntity.status(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION).body(errorMsg);
             logger.debug(u.toString());
             token = jwtService.generateToken(u);
+            token = token.replaceAll("^(.*)$","{\n\"token\"\\:\"$1\"\n}");
+            logger.debug("The generated token in Jason format is: " + token);
         }
         catch (Exception e) {
             String msg = e.getMessage();
@@ -64,7 +68,9 @@ public class Authentication {
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(msg);
         }
 
-        return ResponseEntity.status(HttpServletResponse.SC_OK).body(tokenKeyWord + ":" + tokenType + " " + token);
+//        return ResponseEntity.status(HttpServletResponse.SC_OK).body(tokenKeyWord + ":" + tokenType + " " + token);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(token.toString());
+
     }
 
 }
