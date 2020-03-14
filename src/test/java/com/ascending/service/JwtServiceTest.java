@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationBootstrap.class)
 public class JwtServiceTest {
@@ -25,39 +28,41 @@ public class JwtServiceTest {
 
     private User user;
     private Long id;
-    private final String name = "xf";
-    private final String firstName = "Xiong";
-    private final String lastName = "Fei";
-    private final String email = "xf@gmail.com";
-    private final String password = "xf123!";
+    private final String name = "dwang";
+    private final String firstName = "David";
+    private final String lastName = "Wang";
+    private final String email = "dwang@training.ascendingdc.com";
+    private final String password = "123456789";
     private String token;
 
     @Before
     public void setUp(){
         user = new User(name, password, firstName,lastName, email);
+        user = userService.getUserByEmail(email);
+        id = user.getId();
 
-        id = userService.save(user).getId();
-        assert ( id != null);
+//        id = userService.save(user).getId();
+//        assert ( id != null);
         logger.debug("User is setup before testing,");
     }
 
-    @After
-    public void tearDown(){
-        userDao.delete(user);
-        assert (userDao.findById(id) == null);
-        logger.debug("User is teared down from the database after testing.");
-    }
+//    @After
+//    public void tearDown(){
+//        userDao.delete(user);
+//        assert (userDao.findById(id) == null);
+//        logger.debug("User is teared down from the database after testing.");
+//    }
 
     @Test
     public void generateToken(){
-        String token;
+        Map<String, Object> token = new HashMap<>();
         token = jwtService.generateToken(user);
-        Assert.assertEquals(3, token.split("\\.").length);
+        Assert.assertEquals(3, token.get("token").toString().split("\\.").length);
     }
 
     @Test
     public void decryptJwtToken(){
-        String token = jwtService.generateToken(user);
+        Map<String, Object> token = jwtService.generateToken(user);
         Claims claims = jwtService.decryptJwtToken(token);
         Assert.assertEquals(Long.toString(id), claims.getId());
     }

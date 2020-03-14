@@ -15,7 +15,9 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -52,7 +54,8 @@ public class JwtService {
 //        return claims;
 //    }
 
-    public String generateToken(User user) {
+    public Map<String, Object> generateToken(User user) {
+        Map<String, Object> token = new HashMap<>();
         //JWT signature algorithm using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         //Sign JWT with SECRET_KEY
@@ -84,16 +87,16 @@ public class JwtService {
 //        //Set the JWT Claims
         JwtBuilder builder = Jwts.builder().setClaims(claims).signWith(signatureAlgorithm, signingKey);
         //Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.compact();
+        token.put("token",builder.compact());
+        return token;
     }
-    public Claims decryptJwtToken(String token) {
+
+    public Claims decryptJwtToken(Map<String,Object> token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-                .parseClaimsJws(token).getBody();
+                .parseClaimsJws(token.get("token").toString()).getBody();
         logger.debug("Claims: " + claims.toString());
         return claims;
     }
-
-
 
 }

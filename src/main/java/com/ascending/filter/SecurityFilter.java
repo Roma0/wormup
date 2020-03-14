@@ -15,6 +15,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebFilter(filterName = "SecurityFilter")
 public class SecurityFilter implements Filter {
@@ -32,7 +34,8 @@ public class SecurityFilter implements Filter {
         if(uri.equalsIgnoreCase(AUTH_URI))return HttpServletResponse.SC_ACCEPTED;
 
         try {
-            String token = req.getHeader("Authorization").replaceAll("^(.*?) ", "");
+            Map<String, Object> token = new HashMap<>();
+           token.put("token", req.getHeader("Authorization").replaceAll("^(.*?) ", ""));
             if(token == null || token.isEmpty())return statusCode;
 
             Claims claims = jwtService.decryptJwtToken(token);
