@@ -2,8 +2,6 @@ package com.ascending.service;
 
 import com.ascending.ApplicationBootstrap;
 import com.ascending.model.Account;
-import com.ascending.repository.AccountDao;
-import com.ascending.repository.AccountDaoImpl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

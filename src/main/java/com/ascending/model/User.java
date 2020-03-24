@@ -3,7 +3,6 @@ package com.ascending.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.digest.DigestUtils;
-
 import javax.persistence.*;
 import java.util.List;
 
