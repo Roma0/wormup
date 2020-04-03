@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.digest.DigestUtils;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -45,6 +46,10 @@ public class User {
     @JsonIgnore
     private List<Role> roles;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Image> images;
+
     public Long getId(){return this.id;}
 
     public void setId(Long id) {this.id = id;}
@@ -72,4 +77,17 @@ public class User {
     public void setRole(List<Role> roles){this.roles = roles;}
 
     public List<Role> getRole(){return this.roles;}
+
+    public Set<Image> getImages(){
+        try {
+            int size = images.size();
+        }catch (Exception e){
+            return null;
+        }
+        return this.images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
 }
